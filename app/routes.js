@@ -1,4 +1,4 @@
-var Dress       = require('../app/models/dress');
+var Parking    = require('../app/models/parking');
 var DressCombo = require('../app/models/dressCombo');
 var RecentDress = require('../app/models/recentDress');
 
@@ -18,23 +18,23 @@ module.exports = function(app, passport, jwt) {
     });
 
     // DRESS SECTION =======================
-    app.get('/dress', isLoggedIn, function(req, res) {
-        Dress.find({userid: req.user._id}, function(err, dress){
+    app.get('/parking', isLoggedIn, function(req, res) {
+        Parking.find({userid: req.user._id}, function(err, parking){
             if (err)
                 return next();
             res.send({
-                dresses: dress
+                parkings: parking
             })
         });
     });
 
-    app.post('/dress', isLoggedIn, function(req, res) {
-        var newdress = new Dress({name: req.body.name, type: req.body.type, userid: req.body.userid, events: req.body.events});
-        newdress.save(function(err){
+    app.post('/parking', isLoggedIn, function(req, res) {
+        var newparking = new Parking({name: req.body.name, type: req.body.type, userid: req.body.userid, location: req.body.location});
+        newparking.save(function(err){
             if (err)
                 return next();
             res.send({
-                dress: "added"
+                parking: "added"
             })
         });
         // Dress.find({userid: req._id}, function(err, dress){
@@ -46,12 +46,12 @@ module.exports = function(app, passport, jwt) {
         // });
     });
 
-    app.delete('/dress', isLoggedIn, function(req, res) {
-        Dress.delete({userid: req.user._id}, function(err, dress){
+    app.delete('/parking', isLoggedIn, function(req, res) {
+        Parking.delete({userid: req.user._id}, function(err, parking){
             if (err)
                 return next();
             res.send({
-                dresses: dress
+                parkings: parking
             })
         });
     });
