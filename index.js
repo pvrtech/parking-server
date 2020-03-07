@@ -18,7 +18,7 @@ var config = require('./config/database.js');
 var jwt    = require('jsonwebtoken'); // used to create, sign, and verify tokens
 
 // configuration ===============================================================
-mongoose.connect(config.url); // connect to our database
+mongoose.connect(config.url, {useUnifiedTopology: true, useNewUrlParser: true}); // connect to our database
 
 require('./config/passport')(passport); // pass passport for configuration
 
@@ -42,6 +42,7 @@ app.use(function(req, res, next) {
 	res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization, Access-Control-Allow-Origin, Access-Control-Allow-Headers');
 	next();
 });
+
 // routes ======================================================================
 require('./app/routes.js')(app, passport, jwt); // load our routes and pass in our app and fully configured passport
 

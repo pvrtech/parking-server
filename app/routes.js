@@ -84,7 +84,7 @@ module.exports = function(app, passport, jwt) {
     app.get('/logout', isLoggedIn, function(req, res) {
         req.logout();
         req.session.destroy(function (err) {
-            res.redirect('/'); //Inside a callback… bulletproof!
+            res.render('/'); //Inside a callback… bulletproof!
         });
         //res.send('You are logged out!');
     });
@@ -219,7 +219,7 @@ module.exports = function(app, passport, jwt) {
         user.local.email    = undefined;
         user.local.password = undefined;
         user.save(function(err) {
-            res.redirect('/profile');
+            res.render('/profile');
         });
     });
 
@@ -228,7 +228,7 @@ module.exports = function(app, passport, jwt) {
         var user            = req.user;
         user.facebook.token = undefined;
         user.save(function(err) {
-            res.redirect('/profile');
+            res.render('/profile');
         });
     });
 
@@ -237,7 +237,7 @@ module.exports = function(app, passport, jwt) {
         var user           = req.user;
         user.twitter.token = undefined;
         user.save(function(err) {
-            res.redirect('/profile');
+            res.render('/profile');
         });
     });
 
@@ -246,7 +246,7 @@ module.exports = function(app, passport, jwt) {
         var user          = req.user;
         user.google.token = undefined;
         user.save(function(err) {
-            res.redirect('/profile');
+            res.render('/profile');
         });
     });
 
