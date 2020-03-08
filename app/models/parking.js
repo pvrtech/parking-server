@@ -8,7 +8,10 @@ var parkingSchema = mongoose.Schema({
     type: Array,
     userid: String,
     image: Object,
-    location: Array
+    location: {
+        latitude: Number,
+        longitude: Number
+    }
 });
 
 // create the model for dresss and expose it to our app

@@ -30,12 +30,12 @@ module.exports = function (app, passport, jwt) {
     });
 
     app.post('/parking', isLoggedIn, function (req, res) {
-        var newparking = new Parking({ name: req.body.name, type: req.body.type, userid: req.body.userid, location: req.body.location });
+        var newparking = new Parking({ name: req.body.name, type: req.body.type, userid: req.user._id, location: req.body.location });
         newparking.save(function (err) {
             if (err)
                 return next();
             res.send({
-                parking: "added"
+                success: true
             })
         });
     });
