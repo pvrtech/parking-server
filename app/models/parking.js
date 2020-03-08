@@ -2,17 +2,18 @@
 var mongoose = require('mongoose');
 var bcrypt = require('bcrypt-nodejs');
 
-// define the schema for our dress model
+// define the schema for our parking model
 var parkingSchema = mongoose.Schema({
     name: String,
-    type: Array,
+    type: String,
     userid: String,
-    image: Object,
+    images: Array,
+    facilities: Array,
     location: {
         latitude: Number,
         longitude: Number
     }
 });
 
-// create the model for dresss and expose it to our app
+// create the model for parkings and expose it to our app
 module.exports = mongoose.model('Parking', parkingSchema);

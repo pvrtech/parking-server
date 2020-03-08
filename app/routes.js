@@ -1,6 +1,5 @@
 var Parking = require('../app/models/parking');
-var DressCombo = require('../app/models/dressCombo');
-var RecentDress = require('../app/models/recentDress');
+var CarDetails = require('../app/models/cardetails');
 var User = require('../app/models/user');
 
 module.exports = function (app, passport, jwt) {
@@ -18,13 +17,13 @@ module.exports = function (app, passport, jwt) {
         });
     });
 
-    // DRESS SECTION =======================
+    // PARING SECTION =======================
     app.get('/parking', isLoggedIn, function (req, res) {
         Parking.find({ userid: req.user._id }, function (err, parking) {
             if (err)
                 return next();
             res.send({
-                parkings: parking
+                parking
             })
         });
     });
@@ -49,30 +48,6 @@ module.exports = function (app, passport, jwt) {
             })
         });
     });
-
-    app.post('/selectdress', isLoggedIn, function (req, res) {
-        var today = new Date();
-        var newdress = new RecentDress({ userid: req.body.userid, dressid: req.body.dressid, comboid: req.body.comboid, events: req.body.events, lastweardate: today });
-        newdress.save(function (err) {
-            if (err)
-                return next();
-            res.send({
-                dress: "added"
-            })
-        });
-    });
-
-    app.post('/createcombo', isLoggedIn, function (req, res) {
-        var today = new Date();
-        var newdress = new DressCombo({ userid: req.body.userid, dressid: req.body.dressid, comboid: req.body.comboid, events: req.body.events, type: req.body.type });
-        newdress.save(function (err) {
-            if (err)
-                return next();
-            res.send({
-                dress: "added"
-            })
-        });
-    })
 
     // LOGOUT ==============================
     app.get('/logout', isLoggedIn, function (req, res) {
