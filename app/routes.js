@@ -1,6 +1,7 @@
 var Parking = require('../app/models/parking');
 var DressCombo = require('../app/models/dressCombo');
 var RecentDress = require('../app/models/recentDress');
+var User = require('../app/models/user');
 
 module.exports = function (app, passport, jwt) {
     // normal routes ===============================================================
@@ -37,13 +38,6 @@ module.exports = function (app, passport, jwt) {
                 parking: "added"
             })
         });
-        // Dress.find({userid: req._id}, function(err, dress){
-        //     if (err)
-        //         return next();
-        //     res.send({
-        //         dresses: [dress]
-        //     })
-        // });
     });
 
     app.delete('/parking', isLoggedIn, function (req, res) {
@@ -84,10 +78,31 @@ module.exports = function (app, passport, jwt) {
     app.get('/logout', isLoggedIn, function (req, res) {
         req.logout();
         req.session.destroy(function (err) {
-            res.render('/'); //Inside a callback… bulletproof!
+            res.send('You are logged out!');
+            // res.render('/'); //Inside a callback… bulletproof!
         });
-        //res.send('You are logged out!');
+        // res.send('You are logged out!');
     });
+
+    // VERIFY MOBILE NUMBER =================
+    app.post('/verify/mobile', function (req, res) {
+        let mobileNo = req.body.mobileNo;
+        User.find({ "local.mobileNo": mobileNo }, function (err, user) {
+            if (err)
+                return next();
+
+            if (user && user.length > 0) {
+                res.send({
+                    error: true,
+                    errorMsg: "Phone number already registered!"
+                })
+            } else {
+                res.send({
+                    success: true
+                })
+            }
+        });
+    })
 
     // =============================================================================
     // AUTHENTICATE (FIRST LOGIN) ==================================================

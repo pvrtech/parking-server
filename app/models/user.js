@@ -11,7 +11,7 @@ var userSchema = mongoose.Schema({
         lastname: String,
         gender: String,
         ispaid: Boolean,
-        mobileNumber: Number,
+        mobileNo: String,
         address: {
             streetAddress: String,
             city: String,
