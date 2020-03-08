@@ -102,7 +102,27 @@ module.exports = function (app, passport, jwt) {
                 })
             }
         });
-    })
+    });
+
+    // VERIFY EMAIL =================
+    app.post('/verify/mobile', function (req, res) {
+        let email = req.body.email;
+        User.find({ "local.email": email }, function (err, user) {
+            if (err)
+                return next();
+
+            if (user && user.length > 0) {
+                res.send({
+                    error: true,
+                    errorMsg: "Email already registered!"
+                })
+            } else {
+                res.send({
+                    success: true
+                })
+            }
+        });
+    });
 
     // =============================================================================
     // AUTHENTICATE (FIRST LOGIN) ==================================================
