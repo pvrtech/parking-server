@@ -105,7 +105,7 @@ module.exports = function (app, passport, jwt) {
     });
 
     // VERIFY EMAIL =================
-    app.post('/verify/mobile', function (req, res) {
+    app.post('/verify/email', function (req, res) {
         let email = req.body.email;
         User.find({ "local.email": email }, function (err, user) {
             if (err)
