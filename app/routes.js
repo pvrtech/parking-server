@@ -65,7 +65,7 @@ module.exports = function (app, passport, jwt) {
         res.send("API not yet implemented!!");
     });
     
-    app.get('/api-list', function () {
+    app.get('/api-list', function (req, res) {
         res.json({
             "login": "post",
             "login-otp": "post",
