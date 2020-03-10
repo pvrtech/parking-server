@@ -18,7 +18,7 @@ module.exports = function (app, passport, jwt) {
     });
 
     // PARING SECTION =======================
-    app.get('/parking', isLoggedIn, function (req, res) {
+    app.get('/parking-list', isLoggedIn, function (req, res) {
         Parking.find({ userid: req.user._id }, function (err, parking) {
             if (err)
                 return next();
@@ -28,7 +28,7 @@ module.exports = function (app, passport, jwt) {
         });
     });
 
-    app.post('/parking', isLoggedIn, function (req, res) {
+    app.post('/add-parking', isLoggedIn, function (req, res) {
         var newparking = new Parking({ name: req.body.name, type: req.body.type, userid: req.user._id, location: req.body.location });
         newparking.save(function (err) {
             if (err)
@@ -39,7 +39,7 @@ module.exports = function (app, passport, jwt) {
         });
     });
 
-    app.delete('/parking', isLoggedIn, function (req, res) {
+    app.delete('/delete-parking', isLoggedIn, function (req, res) {
         Parking.delete({ userid: req.user._id }, function (err, parking) {
             if (err)
                 return next();
@@ -47,6 +47,42 @@ module.exports = function (app, passport, jwt) {
                 parkings: parking
             })
         });
+    });
+    
+    app.post('/update-parking', function(req, res) {
+        res.send("API not yet implemented!!");
+    });
+    
+    app.post('/search-parking', function(req, res) {
+        res.send("API not yet implemented!!");
+    });
+    
+    app.post('/book-parking', function(req, res) {
+        res.send("API not yet implemented!!");
+    });
+    
+    app.post('/cancel-parking', function(req, res) {
+        res.send("API not yet implemented!!");
+    });
+    
+    app.get('/api-list', function () {
+        res.json({
+            "login": "post",
+            "login-otp": "post",
+            "generate-otp": "post",
+            "signup": "post",
+            "parking-list": "get",
+            "add-parking": "post",
+            "delete-parking": "delete",
+            "update-parking": "post",
+            "search-parking": "post",
+            "book-parking": "post",
+            "cancel-parking": "post",
+            "check-mobile": "post",
+            "verify-mobile": "post"
+            "check-email": "post",
+            "verify-email": "post"
+        })
     });
 
     // LOGOUT ==============================
@@ -60,7 +96,7 @@ module.exports = function (app, passport, jwt) {
     });
 
     // VERIFY MOBILE NUMBER =================
-    app.post('/verify/mobile', function (req, res) {
+    app.post('/check-mobile', function (req, res) {
         let mobileNo = req.body.mobileNo;
         User.find({ "local.mobileNo": mobileNo }, function (err, user) {
             if (err)
@@ -78,9 +114,13 @@ module.exports = function (app, passport, jwt) {
             }
         });
     });
+    
+    app.post('/verify-mobile', function (req, res) {
+        res.send("API not yet implemented!!");
+    });
 
     // VERIFY EMAIL =================
-    app.post('/verify/email', function (req, res) {
+    app.post('/check-email', function (req, res) {
         let email = req.body.email;
         User.find({ "local.email": email }, function (err, user) {
             if (err)
@@ -98,6 +138,11 @@ module.exports = function (app, passport, jwt) {
             }
         });
     });
+    
+    app.post('/verify-email', function (req, res) {
+        // send email link which will further process the verification
+        res.send("API not yet implemented!!");
+    });
 
     // =============================================================================
     // AUTHENTICATE (FIRST LOGIN) ==================================================
@@ -113,9 +158,17 @@ module.exports = function (app, passport, jwt) {
     // process the login form
     app.post('/login', passport.authenticate('local-login', { session: true }), loginSuccess, function (req, res) {
         res.send("Something is wrong!!");
-    }
-        //failureFlash : true // allow flash messages
-    );
+    });
+    
+    // process the login form via OTP
+    app.post('/login-otp', function (req, res) {
+        res.send("API not yet implemented!!");
+    });
+    
+    // generate and send the OTP
+    app.post('/generate-otp', function (req, res) {
+        res.send("API not yet implemented!!");
+    });
 
     // SIGNUP =================================
     // show the signup form
