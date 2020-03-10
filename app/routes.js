@@ -1,6 +1,7 @@
 var Parking = require('../app/models/parking');
 var CarDetails = require('../app/models/cardetails');
 var User = require('../app/models/user');
+var Mailer = require('../app/mailer');
 
 module.exports = function (app, passport, jwt) {
     // normal routes ===============================================================
@@ -48,23 +49,23 @@ module.exports = function (app, passport, jwt) {
             })
         });
     });
-    
-    app.post('/update-parking', function(req, res) {
+
+    app.post('/update-parking', function (req, res) {
         res.send("API not yet implemented!!");
     });
-    
-    app.post('/search-parking', function(req, res) {
+
+    app.post('/search-parking', function (req, res) {
         res.send("API not yet implemented!!");
     });
-    
-    app.post('/book-parking', function(req, res) {
+
+    app.post('/book-parking', function (req, res) {
         res.send("API not yet implemented!!");
     });
-    
-    app.post('/cancel-parking', function(req, res) {
+
+    app.post('/cancel-parking', function (req, res) {
         res.send("API not yet implemented!!");
     });
-    
+
     app.get('/api-list', function (req, res) {
         res.json({
             "login": "post",
@@ -114,7 +115,7 @@ module.exports = function (app, passport, jwt) {
             }
         });
     });
-    
+
     app.post('/verify-mobile', function (req, res) {
         res.send("API not yet implemented!!");
     });
@@ -138,8 +139,9 @@ module.exports = function (app, passport, jwt) {
             }
         });
     });
-    
-    app.post('/verify-email', function (req, res) {
+
+    app.get('/verify-email', function (req, res) {
+        Mailer.sendMail();
         // send email link which will further process the verification
         res.send("API not yet implemented!!");
     });
@@ -159,12 +161,12 @@ module.exports = function (app, passport, jwt) {
     app.post('/login', passport.authenticate('local-login', { session: true }), loginSuccess, function (req, res) {
         res.send("Something is wrong!!");
     });
-    
+
     // process the login form via OTP
     app.post('/login-otp', function (req, res) {
         res.send("API not yet implemented!!");
     });
-    
+
     // generate and send the OTP
     app.post('/generate-otp', function (req, res) {
         res.send("API not yet implemented!!");
@@ -181,43 +183,6 @@ module.exports = function (app, passport, jwt) {
         res.json({ id: req.user.id, username: req.user.username });
     });
 
-    // facebook -------------------------------
-
-    // send to facebook to do the authentication
-    app.get('/auth/facebook', passport.authenticate('facebook', { scope: 'email' }));
-
-    // handle the callback after facebook has authenticated the user
-    app.get('/auth/facebook/callback',
-        passport.authenticate('facebook', {
-            successRedirect: '/profile',
-            failureRedirect: '/'
-        }));
-
-    // twitter --------------------------------
-
-    // send to twitter to do the authentication
-    app.get('/auth/twitter', passport.authenticate('twitter', { scope: 'email' }));
-
-    // handle the callback after twitter has authenticated the user
-    app.get('/auth/twitter/callback',
-        passport.authenticate('twitter', {
-            successRedirect: '/profile',
-            failureRedirect: '/'
-        }));
-
-
-    // google ---------------------------------
-
-    // send to google to do the authentication
-    app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
-
-    // the callback after google has authenticated the user
-    app.get('/auth/google/callback',
-        passport.authenticate('google', {
-            successRedirect: '/profile',
-            failureRedirect: '/'
-        }));
-
     // =============================================================================
     // AUTHORIZE (ALREADY LOGGED IN / CONNECTING OTHER SOCIAL ACCOUNT) =============
     // =============================================================================
@@ -232,43 +197,6 @@ module.exports = function (app, passport, jwt) {
         failureFlash: true // allow flash messages
     }));
 
-    // facebook -------------------------------
-
-    // send to facebook to do the authentication
-    app.get('/connect/facebook', passport.authorize('facebook', { scope: 'email' }));
-
-    // handle the callback after facebook has authorized the user
-    app.get('/connect/facebook/callback',
-        passport.authorize('facebook', {
-            successRedirect: '/profile',
-            failureRedirect: '/'
-        }));
-
-    // twitter --------------------------------
-
-    // send to twitter to do the authentication
-    app.get('/connect/twitter', passport.authorize('twitter', { scope: 'email' }));
-
-    // handle the callback after twitter has authorized the user
-    app.get('/connect/twitter/callback',
-        passport.authorize('twitter', {
-            successRedirect: '/profile',
-            failureRedirect: '/'
-        }));
-
-
-    // google ---------------------------------
-
-    // send to google to do the authentication
-    app.get('/connect/google', passport.authorize('google', { scope: ['profile', 'email'] }));
-
-    // the callback after google has authorized the user
-    app.get('/connect/google/callback',
-        passport.authorize('google', {
-            successRedirect: '/profile',
-            failureRedirect: '/'
-        }));
-
     // =============================================================================
     // UNLINK ACCOUNTS =============================================================
     // =============================================================================
@@ -281,33 +209,6 @@ module.exports = function (app, passport, jwt) {
         var user = req.user;
         user.local.email = undefined;
         user.local.password = undefined;
-        user.save(function (err) {
-            res.render('/profile');
-        });
-    });
-
-    // facebook -------------------------------
-    app.get('/unlink/facebook', isLoggedIn, function (req, res) {
-        var user = req.user;
-        user.facebook.token = undefined;
-        user.save(function (err) {
-            res.render('/profile');
-        });
-    });
-
-    // twitter --------------------------------
-    app.get('/unlink/twitter', isLoggedIn, function (req, res) {
-        var user = req.user;
-        user.twitter.token = undefined;
-        user.save(function (err) {
-            res.render('/profile');
-        });
-    });
-
-    // google ---------------------------------
-    app.get('/unlink/google', isLoggedIn, function (req, res) {
-        var user = req.user;
-        user.google.token = undefined;
         user.save(function (err) {
             res.render('/profile');
         });
