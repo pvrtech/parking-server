@@ -79,7 +79,7 @@ module.exports = function (app, passport, jwt) {
             "book-parking": "post",
             "cancel-parking": "post",
             "check-mobile": "post",
-            "verify-mobile": "post"
+            "verify-mobile": "post",
             "check-email": "post",
             "verify-email": "post"
         })
