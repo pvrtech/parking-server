@@ -140,10 +140,20 @@ module.exports = function (app, passport, jwt) {
         });
     });
 
-    app.get('/verify-email', function (req, res) {
-        Mailer.sendMail();
-        // send email link which will further process the verification
-        res.send("API not yet implemented!!");
+    app.get("/send-email", function (req, res) {
+        Mailer.sendMail({ id: 1, local: { email: "pvrtech2014@gmail.com" } });
+        res.send("Email sent")
+    })
+
+    app.get('/verify-email/:token', function (req, res) {
+        try {
+            console.log("hello");
+            const id = jwt.verify(req.params.token, "EMAIL_SECRET");
+            User.update({ emailVerified: true }, { where: { id } });
+            res.send("Email verified")
+        } catch (e) {
+            res.send("error")
+        }
     });
 
     // =============================================================================
@@ -180,7 +190,13 @@ module.exports = function (app, passport, jwt) {
 
     // process the signup form
     app.post('/signup', passport.authenticate('local-signup'), function (req, res) {
+        console.log(req);
+        console.log(res);
+        Mailer.sendMail();
         res.json({ id: req.user.id, username: req.user.username });
+    }, function (req, res) {
+        console.log("error")
+        console.log(err);
     });
 
     // =============================================================================

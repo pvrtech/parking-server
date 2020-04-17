@@ -89,13 +89,14 @@ module.exports = function (passport) {
 
                         // check to see if theres already a user with that email
                         if (user) {
-                            return done(null, false, { message: 'That email is already taken.' });
+                            return done(JSON.stringify({ "message": 'That email is already taken.' }), false);
                         } else {
 
                             // create the user
                             var newUser = new User();
 
                             newUser.local.email = email;
+                            newUser.emailVerified = false;
                             newUser.local.password = newUser.generateHash(password);
                             newUser.local.mobileNo = req.body.mobileNo;
                             newUser.local.firstname = req.body.firstname;
@@ -120,7 +121,7 @@ module.exports = function (passport) {
                             return done(err);
 
                         if (user) {
-                            return done(null, false, { message: 'That email is already taken.' });
+                            return done({ message: 'That email is already taken.' }, false);
                             // Using 'loginMessage instead of signupMessage because it's used by /connect/local'
                         } else {
                             var user = req.user;
